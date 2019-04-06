@@ -1,0 +1,46 @@
+#端口配置 默认80端口
+server:
+  port: 8080
+# 环境配置 test测试 dev开发 pro 生产环境
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+#运行环境配置
+spring:
+  profiles:
+    active: dev
+  cache:
+    type: redis
+# 用户配置
+user:
+  password:
+    # 密码错误{maxRetryCount}次锁定10分钟
+    maxRetryCount: 5
+
+#mybatis
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.chris.springbootredis.entity
+  # 加载全局的配置文件
+  configuration:
+    ## 驼峰命名规范
+    map-underscore-to-camel-case: true
+
+#日志
+logging:
+  config: classpath:logback-spring.xml
+
+# logback配置参数（为logback-spring.xml提供）
+logback:
+  #日志输出地址/目录
+  logPath: E:/log/
+  #日志文件名称
+  logbackName: chris-finish-logback
+  #控制台输出级别（debug info warn error）
+  consoleLevel: warn
+
