@@ -50,4 +50,5 @@ swagger注释API: https://blog.csdn.net/chinassj/article/details/81875038
     
 教程地址：https://www.jianshu.com/p/3dade40c5b8f   
 springboot2 文档：https://docs.spring.io/spring-boot/docs/2.1.4.RELEASE/reference/html/  
-springboot2 mongodb 文档：https://docs.spring.io/spring-data/mongodb/docs/2.1.4.RELEASE/reference/html/    
+springboot2 mongodb 文档：https://docs.spring.io/spring-data/mongodb/docs/2.1.4.RELEASE/reference/html/
+mongodb官方 文档：https://docs.mongodb.com/manual/?jmp=footer&_ga=2.154057840.97341573.1554462095-542225666.1547827413   
