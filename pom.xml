@@ -16,6 +16,8 @@
         <module>springboot-rest</module>
         <module>spring-servlet</module>
         <module>spring-boot-servlet</module>
+        <module>springboot-mongodb</module>
+        <module>springboot-redis</module>
     </modules>
     <packaging>pom</packaging>
 

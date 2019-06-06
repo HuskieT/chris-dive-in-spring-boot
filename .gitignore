@@ -7,6 +7,12 @@ target/
 *.tar
 *.tar.gz
 
+# 过滤本地配置
+application-dev.yml
+
+#java ignore
+*.class
+
 # eclipse ignore
 .settings/
 .project
