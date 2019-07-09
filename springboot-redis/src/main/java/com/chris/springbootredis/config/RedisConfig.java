@@ -19,9 +19,6 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
 import javax.annotation.Resource;
-import java.time.Duration;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @Auther: chris
@@ -49,7 +46,10 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Resource
     private LettuceConnectionFactory lettuceConnectionFactory;
-    private static  String keyPrefix = "jf";// key前缀，用于区分不同项目的缓存，建议每个项目单独设置
+    /**
+     * key前缀，用于区分不同项目的缓存，建议每个项目单独设置
+     * */
+    private static  String keyPrefix = "jf";
 
     /**
      * retemplate相关配置
@@ -93,6 +93,7 @@ public class RedisConfig extends CachingConfigurerSupport {
      * @return
      */
     @Bean
+    @Override
     public CacheManager cacheManager() {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(lettuceConnectionFactory);
