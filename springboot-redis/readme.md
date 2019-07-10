@@ -124,11 +124,44 @@ keys、flushall、flushdb、slow lua script，nutil/exec 、operate big value(co
 实战场景：
 1 微博关注人  最新动态/微博
 
-## 4.4
+## 4.4 集合结构
 
-## 4.5
+>  sadd key element （元素）            //向集合key添加element（如果element 已经存在 ，那么添加失败）
+>  srem key element                     //将集合key中的element移除掉
+>  scard  user:1:follow           //计算集合大小（结果：4  ）
+>  sismember user:1:follow it    // 判断 it 是否存在集合中
+>  srandmember user:1:follow  count   //从集合中随机挑选count个元素
+>  spop  user:1:follow    //从集合中随机弹出一个元素
+>  smembers user:1:follow     //获取集合所有元素
+实战场景：
+1 抽奖场景    =》spop  user:1:follow
+2 赞 踩  =》
+3 共同关注好友  =》  sinter user:1:follow   user:2:follow  
 
+>  sdiff  user:1:follow   user:2:follow    //差集
+>  sinter user:1:follow   user:2:follow    //交集
+>  sunion user:1:follow   user:2:follow    //并集
+>  sdiff|sinter|suion + store destkey    //将差集、交集、并集结果保存到destkey中
+## 4.5 有序集合
 
+>  zadd key score element (可以是多对)       //添加score 和 element（时间复杂度 o(logN)）
+>  zrem key element                     // 删除元素
+>  zscore key element                    //饭后元素的分值
+>  zincrby key increScore element     //增加或者减少元素的分值
+>  zcard key                                 //返回元素的总个数
+>  zrank key  element                    //获取分值的排名
+>   zrange key  start  end  [withscore]   //返回指定索引范围内的升序元素[分值](获取一段排名区间的所有分值)
+    **withscore 为备选项  （有则显示 分值和元素，没有 只显示元素）**
+> zrangebyscore key minScore maxScoe  [withscore]      //返回指定分数范围内的升序元素[分值]
+>  zcount key minScore maxScore           //返回有序集合内在指定分数范围内的个数
+> zremrangebyrank  key start end        //删除指定排名内的升序元素
+> zremrangebyscore  key minScore maxScore        //删除指定分数内的升序元素
 
+实战场景：
+1 排行榜    =》存储   id    名称  （计算出rank）
 
-
+>  zrevrank
+>  zrevrange
+>  zrevrangeby
+>  zinterstore
+>  zunionstore
