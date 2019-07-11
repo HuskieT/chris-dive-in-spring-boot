@@ -165,3 +165,107 @@ keys、flushall、flushdb、slow lua script，nutil/exec 、operate big value(co
 >  zrevrangeby
 >  zinterstore
 >  zunionstore
+
+# 5 redis其他功能
+
+## 5.1 慢查询
+
+slowlog-max-len         //慢查询队列长度 （通常设置 1000左右）
+
+slowlog-log-slower-than      //  慢查询阈值（单位：微秒）默认10毫秒  （通常设置 1毫秒）
+slowlog-log-slower-than =0   // 记录所有命令
+slowlog-log-slower-than < 0   // 不记录任何命令
+
+配置方式：
+1 修改配置文件重启
+2 命令行动态配置 
+ config  set slowlog-max-len 100
+config set slowlog-log-slower-than 1000      //(1 毫秒)
+
+slowlog get [n]         获取慢查询队列
+slowlog len               获取慢查询队列长度
+slowlog  reset            清空慢查询队列
+
+**定期持久化慢查询**
+## 5.2 pipeline
+
+    注意每次pipeline 携带数据量
+    pipeline 每次只能作用在一个Redis节点上
+    M操作与pipeline区别
+
+##  5.3 发布订阅
+
+>  publish channel  message            //发布命令 
+>  subscribe [channel]                    //一个或多个  （订阅）  
+>  unsubscribe [channel]                //一个或多个  （取消订阅）  
+>  psubscribe [pattern...]            //订阅模式
+>  punsubscribe [pattern...]          //退订指定的模式
+>  punsub channels                  //  列出至少有一个订阅者的频道
+>  pubsub bumsub [channel...]    // 列出给定频道的订阅者数量
+>  pubsub numpat                  //列出被订阅模式的数量
+
+## 5.4  bitmap 位图
+
+>  setbit key offset value        // 给位图指定索引设置值
+>  getbit key offset
+>  bitcount key [start end]      //获取位图指定返回（start 到 end，单位为字节 ，如果不指定就是获取全部）位值为1的个数
+使用场景:
+1 独立用户统计  （统计每天登陆的用户  并存储 （假设有1亿用户 4000万用户登陆））
+
+## 5.5 HyperLogLog
+基于HyperLogLog 算法 ，使用极小空间完成独立数量统计
+>  pfadd  key element [element...]          //向HyperLogLog添加元素
+>  pfcount key [key...]                //计算HyperLogLog的独立总数
+>  pfmerge destkey sourcekey [sourcekey...]        //合并多个HyperLogLog
+
+使用经验
+1 是否容忍错误 ？  （错误率  0.81%）
+2 是否需要单条数据 ？
+
+# 6 redis持久化
+## 6.1 简介
+RDB =》 快照
+AOF =》写日志
+
+## 6.2 RDB
+触发机制（3种）
+save 同步      （文件替换策略 新的替换旧的）
+bgsave  异步   （RDB一般采用这种）
+自动 
+
+自动生成RDB：
+
+>  save  seconds  changes        //seconds    时间 ；   changes        改变数
+例如 save 60 10000      60秒内10000条数据改变时触发
+
+## 6.3 AOF
+AOF的三种策略： always  everysec   no
+[1] always
+redis =》写命令刷新的缓冲区=》每条命令fsnc到硬盘=》AOF文件
+[2] everysec   
+redis =》写命令刷新的缓冲区=》每秒把缓冲区fsnc到硬盘=》AOF文件
+[2] no
+redis =》写命令刷新的缓冲区=》由系统决定=》AOF文件
+AOF 重写作用：
+减少硬盘占用量
+加速恢复速度
+AOF 重写实现两种方式： bgrewriteaof   AOF重写配置
+> bgrewriteaof      //启动一个线程 进行redisAOF重写（redis内）
+ AOF重写配置：
+
+auto-aof-rewrite-min-size          // AOF 文件重写需要的尺寸
+auto-aof-rewrite-percentage      //AOF文件增长率
+AOF 统计：
+aof_current_size          // AOF 当前尺寸
+aof_base_size            //AOF 上次启动和重写的尺寸
+
+总结：
+RDB 最佳策略 ：关闭   集中管理  主从 从开
+AOF  最佳策略：
+缓存和存储  开
+AOF重写集中管理
+everysec   
+
+最佳策略 ： 小分片 、 缓存或者存储 、监控（硬盘、内存、负载、网络）、足够内存
+
+
