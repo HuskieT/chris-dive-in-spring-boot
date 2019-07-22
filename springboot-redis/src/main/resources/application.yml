@@ -1,6 +1,6 @@
 #端口配置 默认80端口
 server:
-  port: 8080
+  port: 8088
 # 环境配置 test测试 dev开发 pro 生产环境
   tomcat:
     # tomcat的URI编码

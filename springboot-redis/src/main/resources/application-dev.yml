@@ -39,25 +39,28 @@ spring:
     time-zone: GMT+8
     serialization:
       write-dates-as-timestamps: false
+  # redis配置（参考：https://www.jianshu.com/p/ad2ac7412b3c）
   redis:
-    ### redis 数据库索引 （默认0）
+    ## redis 数据库索引 （默认0）
     database: 0
-    ### Redis服务器地址
+    ## Redis服务器地址  #哨兵模式下不用配置
     host: 101.132.106.164
-    ### Redis服务器连接端口
+    ## Redis服务器连接端口 # 哨兵模式下不用配置
     port: 6379
-    ### Redis服务器连接密码（默认为空）
-    password: lin1259191025
-    ### 连接超时时间（毫秒） 此处不能带单位
+    ## Redis服务器连接密码（默认为空）
+    password: 123456
+    ## 连接超时时间（毫秒） 此处不能带单位
     timeout: 10000
-    ##lettuce客户端
+    # 启用SSL支持
+    ssl: false
+    ## lettuce 客户端
     lettuce:
       pool:
-        # 最小空闲连接
-        min-idle: 1
-        # 最大空闲连接 默认8
-        max-idle: 8
-        # 默认-1 最大连接阻塞等待时间（毫秒） 此处不能带单位
-        max-wait: 5000
-        # 最大连接数
+        # 连接池最大连接数 默认8 ，负数表示没有限制
         max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
+        max-wait: -1
+        # 连接池中的最大空闲连接 默认8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认0
+        min-idle: 0

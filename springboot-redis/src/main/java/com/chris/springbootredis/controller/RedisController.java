@@ -2,6 +2,8 @@ package com.chris.springbootredis.controller;
 import com.chris.springbootredis.entity.UserEntity;
 import com.chris.springbootredis.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,4 +48,6 @@ public class RedisController {
     public boolean expire(String key){
         return redisUtil.expire(key,ExpireTime);
     }
+
+
 }
