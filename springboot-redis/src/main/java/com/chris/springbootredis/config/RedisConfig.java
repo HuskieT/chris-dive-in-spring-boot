@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
@@ -12,13 +13,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisPassword;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.*;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPoolConfig;
 
 
 import javax.annotation.Resource;
+import java.time.Duration;
 
 /**
  * @Auther: chris
@@ -46,6 +53,8 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Resource
     private LettuceConnectionFactory lettuceConnectionFactory;
+
+    private RedisConnectionFactory factory;
     /**
      * key前缀，用于区分不同项目的缓存，建议每个项目单独设置
      * */
@@ -55,8 +64,10 @@ public class RedisConfig extends CachingConfigurerSupport {
      * retemplate相关配置
      * @param factory
      * @return
+     * @ConditionalOnMissingBean(name = "redisTemplate") 缺失redisTemplate 时加载次bean
      */
     @Bean
+    @ConditionalOnMissingBean(name = "redisTemplate")
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
 
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -83,10 +94,25 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.setHashValueSerializer(jacksonSeial);
         template.afterPropertiesSet();
         //打开事务支持
-//        template.setEnableTransactionSupport(true);
+        //template.setEnableTransactionSupport(true);
         return template;
     }
-
+    /** 
+     * @Author: linfei 
+     * @Description:   stringRedisTemplate 操作类
+     * @Param:  
+     * @return:  
+     * @Date: 2019/7/22
+     * 如果操作字符串的话，建议用 StringRedisTemplate （stringRedisTemplate 继承RedisTemplate）
+     */ 
+    @Bean
+    @ConditionalOnMissingBean(StringRedisTemplate.class)
+    public StringRedisTemplate stringRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory) {
+        StringRedisTemplate template = new StringRedisTemplate();
+        template.setConnectionFactory(redisConnectionFactory);
+        return template;
+    }
     /**
      * redis全局默认配置
      * @param
@@ -97,9 +123,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager() {
         RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager.RedisCacheManagerBuilder
                 .fromConnectionFactory(lettuceConnectionFactory);
-
         return builder.build();
-
     }
     /**
      * redis key生成策略

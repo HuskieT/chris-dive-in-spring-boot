@@ -17,8 +17,13 @@ import java.util.List;
 @RequestMapping("test")
 public class TestController {
 
+
+    private final UserService userService;
+
     @Autowired
-    private UserService userService;
+    public TestController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("all")
     public String all(){
@@ -32,5 +37,6 @@ public class TestController {
         user = userService.getById(1);
         return user.toString();
     }
+
 
 }

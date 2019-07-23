@@ -44,23 +44,23 @@ spring:
     ## redis 数据库索引 （默认0）
     database: 0
     ## Redis服务器地址  #哨兵模式下不用配置
-    host: 101.132.106.164
+    host: localhost
     ## Redis服务器连接端口 # 哨兵模式下不用配置
-    port: 6379
+    port: 16379
     ## Redis服务器连接密码（默认为空）
-    password: 123456
+    password: chris123456
     ## 连接超时时间（毫秒） 此处不能带单位
     timeout: 10000
     # 启用SSL支持
     ssl: false
-    ## lettuce 客户端
-    lettuce:
+    ##jedis客户端
+    jedis:
       pool:
-        # 连接池最大连接数 默认8 ，负数表示没有限制
-        max-active: 8
-        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认-1
-        max-wait: -1
-        # 连接池中的最大空闲连接 默认8
-        max-idle: 8
-        # 连接池中的最小空闲连接 默认0
-        min-idle: 0
+        # 最大连接数 默认8
+        max-active: 1000
+        # 最大空闲连接 默认8
+        max-idle: 10
+        # 默认-1 最大连接阻塞等待时间（毫秒） 此处不能带单位 (负数表示没限制)
+        max-wait: 5000
+        # 最小空闲连接 默认0
+        min-idle: 5

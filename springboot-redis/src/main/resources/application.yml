@@ -1,6 +1,6 @@
 #端口配置 默认80端口
 server:
-  port: 8088
+  port: 8087
 # 环境配置 test测试 dev开发 pro 生产环境
   tomcat:
     # tomcat的URI编码
@@ -16,6 +16,14 @@ spring:
     active: dev
   cache:
     type: redis
+  devtools:
+    restart:
+      #热部署生效
+      enabled: true
+      #设置重启的目录
+      additional-paths: resources/**,static/**,templates/**
+      #该目录下的内容修改不重启
+      exclude: data/**
 # 用户配置
 user:
   password:
@@ -38,7 +46,7 @@ logging:
 # logback配置参数（为logback-spring.xml提供）
 logback:
   #日志输出地址/目录
-  logPath: E:/log/
+  logPath: D:/cache/log
   #日志文件名称
   logbackName: chris-finish-logback
   #控制台输出级别（debug info warn error）

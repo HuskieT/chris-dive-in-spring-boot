@@ -1,5 +1,5 @@
 #
-
+**redis4 可以用unlink 删除大key**
 **redis 返回取值返回从0开始 ，范围为等值（例： 1 4  //从第二个到第五个 包括第五个值）**
 # 1 springboot +mybatis+ redis 
 @Cacheable 触发缓存入口
